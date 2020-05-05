@@ -107,6 +107,7 @@ def compute_cost(AL, Y, parameters, lambd):
     #print(np.inf(AL.any()))
     # Compute loss from aL and y.
     cost = 1/m*-(np.sum(Y * np.log(AL) + (1-Y)*np.log(1-AL))) 
+
     regTerm = 0
     L = int(len(parameters) / 2)
     for l in range(L):
