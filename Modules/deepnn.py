@@ -322,7 +322,7 @@ def L_layer_model(X, Y, layers_dims, learning_rate = 0.3, num_iterations = 25000
     
     return parameters
 
-def L_layer_model_dropout(X, Y, layers_dims, learning_rate = 0.3, num_iterations = 25000, print_cost=True, lambd = 0.7):#lr was 0.009
+def L_layer_model_dropout(X, Y, layers_dims, learning_rate = 0.3, num_iterations = 25000, print_cost=True):#lr was 0.009
     "START"
     np.random.seed(1)
     costs = []                         # keep track of cost
@@ -337,10 +337,10 @@ def L_layer_model_dropout(X, Y, layers_dims, learning_rate = 0.3, num_iterations
         #caches contains list of cache i.e (linearcache=(A_prev,W,B), activationcache= (Z))
         AL, caches = dropout.L_Model_Forward_Dropout(X, parameters,0.5)
         # Compute cost.
-        cost = compute_cost(AL,Y,parameters,lambd)
+        cost = compute_cost(AL,Y,parameters,0) #replace lambda for 0 with dropout since it replaces normal reg
     
         # Backward propagation.
-        grads = dropout.L_Model_Backwards_Dropout(AL,Y,caches,lambd,0.5)
+        grads = dropout.L_Model_Backwards_Dropout(AL,Y,caches,0,0.5)#replace lambda for 0 with dropout since it replaces normal reg
 
         # Update parameters.
         parameters = update_parameters(parameters,grads,learning_rate)
