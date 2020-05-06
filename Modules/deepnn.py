@@ -10,6 +10,7 @@ import numpy as np
 import h5py
 import matplotlib.pyplot as plt
 from Modules import testCases_v4a
+from Modules import dropout
 
 def sigmoid_prime(x):
     s = 1/(1+np.exp(-x))
@@ -321,7 +322,44 @@ def L_layer_model(X, Y, layers_dims, learning_rate = 0.3, num_iterations = 25000
     
     return parameters
 
+def L_layer_model_dropout(X, Y, layers_dims, learning_rate = 0.3, num_iterations = 25000, print_cost=True, lambd = 0.7):#lr was 0.009
+    "START"
+    np.random.seed(1)
+    costs = []                         # keep track of cost
+    
+    # Parameters initialization. (≈ 1 line of code)
+    #e.g. layers_dims = [12288, 20, 7, 5, 1]
+    parameters = initialize_parameters(layers_dims)
 
+    # Loop (gradient descent)
+    for i in range(0, num_iterations):
+        # Forward propagation: [LINEAR -> RELU]*(L-1) -> LINEAR -> SIGMOID.
+        #caches contains list of cache i.e (linearcache=(A_prev,W,B), activationcache= (Z))
+        AL, caches = dropout.L_Model_Forward_Dropout(X, parameters,0.5)
+        # Compute cost.
+        cost = compute_cost(AL,Y,parameters,lambd)
+    
+        # Backward propagation.
+        grads = dropout.L_Model_Backwards_Dropout(AL,Y,caches,lambd,0.5)
+
+        # Update parameters.
+        parameters = update_parameters(parameters,grads,learning_rate)
+
+                
+        # Print the cost every 100 training example
+        if print_cost and i % 10 == 0:
+            print ("Cost after iteration %i: %f" %(i, cost))
+        if print_cost and i % 10 == 0:
+            costs.append(cost)
+            
+    # plot the cost
+    plt.plot(np.squeeze(costs))
+    plt.ylabel('cost')
+    plt.xlabel('iterations (per hundreds)')
+    plt.title("Learning rate =" + str(learning_rate))
+    plt.show()
+    
+    return parameters
 
 
 
