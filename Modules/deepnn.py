@@ -66,7 +66,8 @@ def L_Model_Forward(X,parameters):
     A = X
     L = int(len(parameters)/2)
     for l in range(1,L):
-        A,cache =linear_forward_Activation(A,parameters["W"+str(l)],parameters["b"+str(l)],"relu")
+        #A,cache =linear_forward_Activation(A,parameters["W"+str(l)],parameters["b"+str(l)],"relu")
+        A,cache =linear_forward_Activation(A,parameters["W"+str(l)],parameters["b"+str(l)],"sigmoid")
         caches.append(cache)
     AL,cache =linear_forward_Activation(A,parameters["W"+str(L)],parameters["b"+str(L)],"sigmoid")
     caches.append(cache)
@@ -184,7 +185,8 @@ def L_Model_Backwards(AL,Y,caches,lambd):
         #A_prev, W, b = linear_cache
         #Z = activation_cache
         
-        grads["dA"+str(l)], grads["dW"+str(l+1)],  grads["db"+str(l+1)] = linear_activation_backward(grads["dA"+str(l+1)], cache,"relu",lambd)
+        #grads["dA"+str(l)], grads["dW"+str(l+1)],  grads["db"+str(l+1)] = linear_activation_backward(grads["dA"+str(l+1)], cache,"relu",lambd)
+        grads["dA"+str(l)], grads["dW"+str(l+1)],  grads["db"+str(l+1)] = linear_activation_backward(grads["dA"+str(l+1)], cache,"sigmoid",lambd)
         #grads["dZ"+str(l+1)] = grads["dA"+str(l+1)] * relu_prime(Z)#should be AL - Y
         #grads["db"+str(l+1)] = (1/m) *  np.sum(grads["dZ"+str(l+1)],axis=1,keepdims=True)
         #grads["dW"+str(l+1)] = (1/m) *  grads["dZ"+str(l+1)].dot(A_prev.T)
@@ -308,9 +310,9 @@ def L_layer_model(X, Y, layers_dims, learning_rate = 0.3, num_iterations = 25000
 
                 
         # Print the cost every 100 training example
-        if print_cost and i % 10 == 0:
+        if print_cost and i % 100 == 0:
             print ("Cost after iteration %i: %f" %(i, cost))
-        if print_cost and i % 10 == 0:
+        if print_cost and i % 50 == 0:
             costs.append(cost)
             
     # plot the cost

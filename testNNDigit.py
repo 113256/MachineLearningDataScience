@@ -6,7 +6,11 @@ from Modules import mnistHelper as mHelper
 from Modules import deepnn as deepnn
 from Modules import adamGradientDescent as adam
 from Modules import testCases_v4a
+import numpy as np
+import matplotlib.pyplot as plt
+
 (trainXOriginal, trainyOriginal), (testXOriginal, testyOriginal) = mnist.load_data()
+
 
 # summarize loaded dataset
 print('Train: X=%s, y=%s' % (trainXOriginal.shape, trainyOriginal.shape))
@@ -39,10 +43,12 @@ XTest /= 255
 #transpose all
 XTest,XTrain,yTest,yTrain = XTest.T,XTrain.T,yTest.T,yTrain.T
 
+print(yTrain.shape)
+print(XTrain.shape)
 #parameters = deepnn.L_layer_model(XTrain, yTrain,layers_dims = [XTrain.shape[0], 64, 10], num_iterations = 50, learning_rate = 0.8, lambd = 0.3)
-#parameters = deepnn.L_layer_model_mini(XTrain, yTrain,layers_dims = [XTrain.shape[0], 50, 10], num_iterations = 20, learning_rate = 0.8, lambd = 0, mini_batch_size=64, optimizer="gd", printIteration=2, updateIteration=2)
+parameters = deepnn.L_layer_model_mini(XTrain, yTrain,layers_dims = [XTrain.shape[0], 50, 10], num_iterations = 20, learning_rate = 0.8, lambd = 0, mini_batch_size=64, optimizer="gd", printIteration=2, updateIteration=2)
 #parameters = deepnn.L_layer_model_mini(XTrain, yTrain,layers_dims = [XTrain.shape[0], 50, 10], num_iterations = 20, learning_rate = 0.8, lambd = 0, mini_batch_size=64, optimizer="adam",printIteration=2 ,updateIteration=2)
-parameters = deepnn.L_layer_model_dropout(XTrain, yTrain,layers_dims = [XTrain.shape[0], 64, 10], num_iterations = 70, learning_rate = 0.8)
+#parameters = deepnn.L_layer_model_dropout(XTrain, yTrain,layers_dims = [XTrain.shape[0], 64, 10], num_iterations = 70, learning_rate = 0.8)
 print ("On the training set:")
 predictions_train = mHelper.predictMinst(XTrain, trainyOriginal, parameters)
 print ("On the test set:")
